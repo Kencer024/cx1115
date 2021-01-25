@@ -1,0 +1,55 @@
+# Basic Libraries
+import numpy as np
+import pandas as pd
+import seaborn as sb
+import matplotlib.pyplot as plt # we only need pyplot
+sb.set() # set the default Seaborn style for graphics
+
+train_data = pd.read_csv('train.csv')
+train_data.head(20)
+
+num_data = train_data.select_dtypes(include =['int64'])  #select df.select_dtypes(include/exclude = etc)
+num_data.head(20)
+
+num_data.describe().round(2)
+
+# Correlation Matrix
+print(num_data.corr())
+
+# Heatmap of the Correlation Matrix
+f = plt.figure(figsize=(20, 20))
+sb.heatmap(num_data.corr(), vmin = -1, vmax = 1, linewidths = 1,
+           annot = True, fmt = ".2f", annot_kws = {"size": 18}, cmap = "RdBu")
+           
+# Extract only the numeric data variables
+num_data1 = pd.DataFrame(train_data[["MSSubClass", "OverallQual", "OverallCond", "YearBuilt", "YrSold","SalePrice"]])
+print(num_data1.corr())
+
+# Heatmap of the Correlation Matrix
+f = plt.figure(figsize=(20, 20))
+sb.heatmap(num_data1.corr(), vmin = -1, vmax = 1, linewidths = 1,
+           annot = True, fmt = ".2f", annot_kws = {"size": 18}, cmap = "RdBu")
+           
+# Draw the distributions of all variables
+f, axes = plt.subplots(6, 3, figsize=(18, 24))
+
+count = 0
+for var in num_data1:
+    sb.boxplot(data = num_data1[var], orient = "h", ax = axes[count,0])
+    sb.histplot(data = num_data1[var], ax = axes[count,1])
+    sb.violinplot(data = num_data1[var], orient = "h", ax = axes[count,2])
+    count += 1
+    
+SPrice = pd.DataFrame(train_data["SalePrice"])
+SPrice.head(10)
+LotArea = pd.DataFrame(train_data['LotArea'])
+
+# Create a joint dataframe by concatenating the two variables
+jointDF = pd.concat([SPrice, LotArea], axis = 1).reindex(SPrice.index)
+jointDF
+
+# Draw jointplot of the two variables in the joined dataframe
+sb.jointplot(data = jointDF, x = "SalePrice", y = "LotArea", height = 12)
+
+f = plt.figure(figsize=(16, 8))
+sb.kdeplot(data = SPrice)
