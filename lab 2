@@ -53,3 +53,12 @@ sb.jointplot(data = jointDF, x = "SalePrice", y = "LotArea", height = 12)
 
 f = plt.figure(figsize=(16, 8))
 sb.kdeplot(data = SPrice)
+
+
+#multiple plot
+#plot the motherfucking corr graph for evrythng
+for var in num_data2:
+    var1 = pd.DataFrame(num_data2[var])  #creatin a mofo df for dem bois
+    jointDF = pd.concat([SPrice, var1], axis = 1)
+    # Draw jointplot of the two variables in the joined dataframe
+    sb.jointplot(data = jointDF, x = "SalePrice" , y = var, height = 12)
