@@ -55,6 +55,12 @@ f = plt.figure(figsize=(16, 8))
 sb.kdeplot(data = SPrice)
 
 
+#changing col
+trial_data = num_data.iloc[:,0:34]
+trial_data.head()
+num_data2 = num_data.drop(['SalePrice'], axis = 1)
+num_data2.head()
+
 #multiple plot
 #plot the motherfucking corr graph for evrythng
 for var in num_data2:
